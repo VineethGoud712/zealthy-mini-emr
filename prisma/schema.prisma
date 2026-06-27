@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum PatientStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RepeatSchedule {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum RefillSchedule {
+  NONE
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+}
+
+model Patient {
+  id            String   @id @default(uuid())
+  firstName     String
+  lastName      String
+  email         String   @unique
+  passwordHash  String
+  phone         String?
+  dateOfBirth   DateTime?
+  gender        Gender?
+  status        PatientStatus @default(ACTIVE)
+
+  appointments  Appointment[]
+  prescriptions Prescription[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Medication {
+  id            String @id @default(uuid())
+  name          String @unique
+
+  prescriptions Prescription[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Appointment {
+  id              String @id @default(uuid())
+
+  patientId       String
+  patient         Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  providerName    String
+
+  scheduledAt     DateTime
+
+  repeatSchedule  RepeatSchedule @default(NONE)
+
+  repeatUntil     DateTime?
+
+  notes           String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model Prescription {
+  id               String @id @default(uuid())
+
+  patientId        String
+  patient          Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  medicationId     String
+  medication       Medication @relation(fields: [medicationId], references: [id])
+
+  dosage           String
+
+  quantity         Int
+
+  refillDate       DateTime
+
+  refillSchedule   RefillSchedule @default(MONTHLY)
+
+  refillUntil      DateTime?
+
+  notes            String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([medicationId])
+}
