@@ -1,5 +1,15 @@
 import { prisma } from "@/lib/prisma";
 
+export async function findPatientByEmail(
+  email: string,
+) {
+  return prisma.patient.findUnique({
+    where: {
+      email,
+    },
+  });
+}
+
 export async function createPatient(data: {
   firstName: string;
   lastName: string;

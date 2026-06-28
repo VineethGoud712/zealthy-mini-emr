@@ -1,4 +1,27 @@
-import { Appointment } from "@/types/patient";
+import Link from 'next/link';
+
+import { Pencil } from 'lucide-react';
+
+import DeleteDialog from './DeleteDialog';
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+import { Button } from '@/components/ui/button';
+
+interface Appointment {
+  id: string;
+  patientId: string;
+  providerName: string;
+  scheduledAt: Date;
+  repeatSchedule: string;
+}
 
 interface Props {
   appointments: Appointment[];
@@ -7,38 +30,66 @@ interface Props {
 export default function AppointmentTable({
   appointments,
 }: Props) {
+  if (appointments.length === 0) {
+    return (
+      <p className="text-muted-foreground">
+        No appointments found.
+      </p>
+    );
+  }
+
   return (
-    <div className="rounded-lg border bg-white p-6 shadow">
-      <h2 className="mb-6 text-xl font-bold">
-        Appointments
-      </h2>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Provider</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>Repeat</TableHead>
+          <TableHead className="text-center">
+            Actions
+          </TableHead>
+        </TableRow>
+      </TableHeader>
 
-      {appointments.length === 0 ? (
-        <p>No appointments.</p>
-      ) : (
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th className="text-left">Provider</th>
-              <th className="text-left">Date</th>
-            </tr>
-          </thead>
+      <TableBody>
+        {appointments.map((appointment) => (
+          <TableRow key={appointment.id}>
+            <TableCell>
+              {appointment.providerName}
+            </TableCell>
 
-          <tbody>
-            {appointments.map((appointment) => (
-              <tr key={appointment.id}>
-                <td>{appointment.providerName}</td>
+            <TableCell>
+              {appointment.scheduledAt.toLocaleString()}
+            </TableCell>
 
-                <td>
-                  {new Date(
-                    appointment.scheduledAt,
-                  ).toLocaleString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+            <TableCell>
+              {appointment.repeatSchedule}
+            </TableCell>
+
+            <TableCell>
+              <div className="flex justify-center gap-2">
+                <Button
+                  asChild
+                  size="icon"
+                  variant="outline"
+                >
+                  <Link
+                    href={`/admin/patients/${appointment.patientId}/appointments/${appointment.id}/edit`}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Link>
+                </Button>
+
+                <DeleteDialog
+                  url={`/api/appointments/${appointment.id}`}
+                  title="Delete Appointment"
+                  description="Are you sure you want to delete this appointment?"
+                />
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

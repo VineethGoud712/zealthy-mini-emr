@@ -1,21 +1,33 @@
-'use client';
+import Link from 'next/link';
+import { UserPlus } from 'lucide-react';
 
-export default function AdminHeader() {
+import { Button } from '@/components/ui/button';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+export default function AdminHeader({
+  title,
+  description,
+}: Props) {
   return (
-    <header className="flex h-20 items-center justify-between border-b bg-white px-8">
+    <div className="flex items-center justify-between">
       <div>
-        <h2 className="text-2xl font-bold">
-          Patient Management
-        </h2>
+        <h1 className="text-3xl font-bold">{title}</h1>
 
-        <p className="text-sm text-slate-500">
-          Mini EMR Dashboard
+        <p className="mt-1 text-muted-foreground">
+          {description}
         </p>
       </div>
 
-      <div className="rounded-full bg-slate-200 px-4 py-2 text-sm font-medium">
-        Admin
-      </div>
-    </header>
+      <Button asChild>
+        <Link href="/admin/patients/new">
+          <UserPlus className="mr-2 h-4 w-4" />
+          New Patient
+        </Link>
+      </Button>
+    </div>
   );
 }

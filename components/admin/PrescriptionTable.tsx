@@ -1,4 +1,36 @@
-import { Prescription } from "@/types/patient";
+import Link from 'next/link';
+
+import { Pencil } from 'lucide-react';
+
+import DeleteDialog from './DeleteDialog';
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+import { Button } from '@/components/ui/button';
+
+interface Prescription {
+  id: string;
+  patientId: string;
+
+  dosage: string;
+
+  quantity: number;
+
+  refillDate: Date;
+
+  refillSchedule: string;
+
+  medication: {
+    name: string;
+  };
+}
 
 interface Props {
   prescriptions: Prescription[];
@@ -7,47 +39,92 @@ interface Props {
 export default function PrescriptionTable({
   prescriptions,
 }: Props) {
+  if (prescriptions.length === 0) {
+    return (
+      <p className="text-muted-foreground">
+        No prescriptions found.
+      </p>
+    );
+  }
+
   return (
-    <div className="rounded-lg border bg-white p-6 shadow">
-      <h2 className="mb-6 text-xl font-bold">
-        Prescriptions
-      </h2>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+            Medication
+          </TableHead>
 
-      {prescriptions.length === 0 ? (
-        <p>No prescriptions.</p>
-      ) : (
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th className="text-left">
-                Medication
-              </th>
+          <TableHead>
+            Dosage
+          </TableHead>
 
-              <th className="text-left">
-                Dosage
-              </th>
+          <TableHead>
+            Quantity
+          </TableHead>
 
-              <th className="text-left">
-                Quantity
-              </th>
-            </tr>
-          </thead>
+          <TableHead>
+            Refill
+          </TableHead>
 
-          <tbody>
-            {prescriptions.map((prescription) => (
-              <tr key={prescription.id}>
-                <td>
-                  {prescription.medication.name}
-                </td>
+          <TableHead className="text-center">
+            Actions
+          </TableHead>
+        </TableRow>
+      </TableHeader>
 
-                <td>{prescription.dosage}</td>
+      <TableBody>
+        {prescriptions.map(
+          (prescription) => (
+            <TableRow
+              key={prescription.id}
+            >
+              <TableCell>
+                {
+                  prescription
+                    .medication.name
+                }
+              </TableCell>
 
-                <td>{prescription.quantity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+              <TableCell>
+                {prescription.dosage}
+              </TableCell>
+
+              <TableCell>
+                {prescription.quantity}
+              </TableCell>
+
+              <TableCell>
+                {prescription.refillDate.toLocaleDateString()}
+              </TableCell>
+
+              <TableCell>
+                <div className="flex justify-center gap-2">
+
+                  <Button
+                    asChild
+                    size="icon"
+                    variant="outline"
+                  >
+                    <Link
+                      href={`/admin/patients/${prescription.patientId}/prescriptions/${prescription.id}/edit`}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Link>
+                  </Button>
+
+                  <DeleteDialog
+                    url={`/api/prescriptions/${prescription.id}`}
+                    title="Delete Prescription"
+                    description="Are you sure you want to delete this prescription?"
+                  />
+
+                </div>
+              </TableCell>
+            </TableRow>
+          ),
+        )}
+      </TableBody>
+    </Table>
   );
 }

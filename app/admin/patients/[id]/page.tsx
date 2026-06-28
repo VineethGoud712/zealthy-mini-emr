@@ -3,16 +3,24 @@ import { notFound } from 'next/navigation';
 
 import {
   ArrowLeft,
-  Pencil,
   CalendarPlus,
+  Pencil,
   Pill,
+  User,
 } from 'lucide-react';
+
+import { getPatientService } from '@/services/patient.service';
 
 import PatientInfoCard from '@/components/admin/PatientInfoCard';
 import AppointmentTable from '@/components/admin/AppointmentTable';
 import PrescriptionTable from '@/components/admin/PrescriptionTable';
 
-import { getPatientService } from '@/services/patient.service';
+import { Button } from '@/components/ui/button';
+
+import {
+  Card,
+  CardContent,
+} from '@/components/ui/card';
 
 interface Props {
   params: Promise<{
@@ -25,7 +33,8 @@ export default async function PatientDetailsPage({
 }: Props) {
   const { id } = await params;
 
-  const patient = await getPatientService(id);
+  const patient =
+    await getPatientService(id);
 
   if (!patient) {
     notFound();
@@ -33,81 +42,158 @@ export default async function PatientDetailsPage({
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
           <Link
-            href="/admin"
-            className="mb-3 inline-flex items-center gap-2 text-sm text-slate-500 hover:text-blue-600"
-          >
-            <ArrowLeft size={16} />
-            Back to Patients
-          </Link>
+        href="/admin"
+        className="mb-3 inline-flex items-center gap-2 text-black-100 transition hover:text-blue"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to Patients
+      </Link>
 
-          <h1 className="text-3xl font-bold">
-            {patient.firstName} {patient.lastName}
-          </h1>
+      {/* Hero */}
+<Card className="overflow-hidden rounded-[32px] border-0 bg-gradient-to-r from-blue-600 via-blue-600 to-cyan-500 text-white shadow-xl">
 
-          <p className="mt-1 text-slate-500">
-            Patient Details
-          </p>
-        </div>
+  <CardContent className="flex flex-col gap-4 p-4 px-8 py-5 lg:flex-row lg:items-center lg:justify-between">
+    <div>
+    
 
-        <div className="flex gap-3">
+      <h1 className="text-3xl font-bold">
+        {patient.firstName} {patient.lastName}
+      </h1>
+
+      <p className="mt-1 text-blue-100">
+        Patient Profile
+      </p>
+    </div>
+
+    <div className="hidden rounded-full bg-white/10 p-5 backdrop-blur lg:block">
+      <User className="h-14 w-14" />
+    </div>
+  </CardContent>
+</Card>
+
+      {/* Actions */}
+
+      <div className="flex flex-wrap gap-4">
+
+        <Button
+          asChild
+          className="rounded-xl"
+        >
           <Link
             href={`/admin/patients/${patient.id}/edit`}
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
           >
-            <Pencil size={18} />
+            <Pencil className="mr-2 h-4 w-4" />
             Edit Patient
           </Link>
-        </div>
+        </Button>
+
+        <Button
+          asChild
+          variant="outline"
+          className="rounded-xl"
+        >
+          <Link
+            href={`/admin/patients/${patient.id}/appointments/new`}
+          >
+            <CalendarPlus className="mr-2 h-4 w-4" />
+            Add Appointment
+          </Link>
+        </Button>
+
+        <Button
+          asChild
+          variant="outline"
+          className="rounded-xl"
+        >
+          <Link
+            href={`/admin/patients/${patient.id}/prescriptions/new`}
+          >
+            <Pill className="mr-2 h-4 w-4" />
+            Add Prescription
+          </Link>
+        </Button>
+
       </div>
 
       {/* Patient Information */}
-      <PatientInfoCard patient={patient} />
 
-      {/* Appointment Section */}
-      <div className="space-y-4">
+      <section className="space-y-4">
+
+        <h2 className="text-2xl font-bold">
+          Patient Information
+        </h2>
+
+        <PatientInfoCard
+          patient={patient}
+        />
+
+      </section>
+
+      {/* Appointments */}
+
+      <section className="space-y-4">
+
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">
+
+          <h2 className="text-2xl font-bold">
             Appointments
           </h2>
 
-          <button
-            className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white transition hover:bg-green-700"
-            disabled
-          >
-            <CalendarPlus size={18} />
-            Add Appointment
-          </button>
+          <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700">
+            {patient.appointments.length} Total
+          </span>
+
         </div>
 
-        <AppointmentTable
-          appointments={patient.appointments}
-        />
-      </div>
+        <Card className="rounded-3xl shadow-sm">
 
-      {/* Prescription Section */}
-      <div className="space-y-4">
+          <CardContent className="p-6">
+
+            <AppointmentTable
+              appointments={
+                patient.appointments
+              }
+            />
+
+          </CardContent>
+
+        </Card>
+
+      </section>
+
+      {/* Prescriptions */}
+
+      <section className="space-y-4">
+
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">
+
+          <h2 className="text-2xl font-bold">
             Prescriptions
           </h2>
 
-          <button
-            className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-white transition hover:bg-purple-700"
-            disabled
-          >
-            <Pill size={18} />
-            Add Prescription
-          </button>
+          <span className="rounded-full bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-700">
+            {patient.prescriptions.length} Total
+          </span>
+
         </div>
 
-        <PrescriptionTable
-          prescriptions={patient.prescriptions}
-        />
-      </div>
+        <Card className="rounded-3xl shadow-sm">
+
+          <CardContent className="p-6">
+
+            <PrescriptionTable
+              prescriptions={
+                patient.prescriptions
+              }
+            />
+
+          </CardContent>
+
+        </Card>
+
+      </section>
+
     </div>
   );
 }

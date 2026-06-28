@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 interface Props {
   patientId: string;
@@ -20,10 +21,7 @@ interface Props {
   defaultValues: UpdatePatientInput;
 }
 
-export default function EditPatientForm({
-  patientId,
-  defaultValues,
-}: Props) {
+export default function EditPatientForm({ patientId, defaultValues }: Props) {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -45,28 +43,27 @@ export default function EditPatientForm({
 
       setServerError('');
 
-      const response = await fetch(
-        `/api/patients/${patientId}`,
-        {
-          method: 'PATCH',
+      const response = await fetch(`/api/patients/${patientId}`, {
+        method: 'PATCH',
 
-          headers: {
-            'Content-Type': 'application/json',
-          },
-
-          body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+
+        body: JSON.stringify(data),
+      });
 
       const result = await response.json();
 
       if (!response.ok) {
-        setServerError(
-          result.message || 'Unable to update patient.',
-        );
+        setServerError(result.message || 'Unable to update patient.');
+
+        toast.error(result.message ?? 'Unable to update patient.');
 
         return;
       }
+
+      toast.success('Patient updated successfully.');
 
       router.push(`/admin/patients/${patientId}`);
 
@@ -82,14 +79,9 @@ export default function EditPatientForm({
 
   return (
     <div className="rounded-lg border bg-white p-8 shadow">
-      <h2 className="mb-6 text-2xl font-bold">
-        Edit Patient
-      </h2>
+      <h2 className="mb-6 text-2xl font-bold">Edit Patient</h2>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-2 gap-5">
           <div>
             <Label>First Name</Label>
@@ -119,15 +111,10 @@ export default function EditPatientForm({
         <div>
           <Label>Email</Label>
 
-          <Input
-            type="email"
-            {...register('email')}
-          />
+          <Input type="email" {...register('email')} />
 
           {errors.email && (
-            <p className="mt-1 text-sm text-red-500">
-              {errors.email.message}
-            </p>
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
           )}
         </div>
 
@@ -160,14 +147,8 @@ export default function EditPatientForm({
           </div>
         )}
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={loading}
-        >
-          {loading
-            ? 'Updating Patient...'
-            : 'Update Patient'}
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? 'Updating Patient...' : 'Update Patient'}
         </Button>
       </form>
     </div>
