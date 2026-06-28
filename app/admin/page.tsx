@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 
 import {
@@ -6,7 +8,6 @@ import {
   Eye,
   Pencil,
   Plus,
-  Search,
   Users,
 } from 'lucide-react';
 
@@ -14,7 +15,7 @@ import { prisma } from '@/lib/prisma';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+
 
 import {
   Card,
