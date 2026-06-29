@@ -9,10 +9,6 @@ export default function PatientInfoCard({
 }: Props) {
   return (
     <div className="rounded-lg border bg-white p-6 shadow">
-      <h2 className="mb-6 text-xl font-bold">
-        Patient Information
-      </h2>
-
       <div className="grid grid-cols-2 gap-5">
         <div>
           <p className="text-sm text-slate-500">

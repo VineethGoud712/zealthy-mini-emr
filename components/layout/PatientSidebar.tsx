@@ -1,7 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import {
+  usePathname,
+  useRouter,
+} from 'next/navigation';
 
 import {
   CalendarDays,
@@ -32,6 +35,16 @@ const navigation = [
 
 export default function PatientSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+    });
+
+    router.replace('/');
+    router.refresh();
+  }
 
   return (
     <aside className="hidden w-72 flex-col border-r bg-white lg:flex">
@@ -67,7 +80,10 @@ export default function PatientSidebar() {
       </nav>
 
       <div className="border-t p-4">
-        <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-600 transition hover:bg-red-50">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-600 transition hover:bg-red-50"
+        >
           <LogOut className="h-5 w-5" />
 
           Logout

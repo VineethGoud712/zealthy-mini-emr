@@ -1,103 +1,64 @@
-# Zealthy EMR
+# Zealthy Mini EMR
 
-A modern Electronic Medical Record (EMR) web application built with Next.js, TypeScript, Prisma, PostgreSQL, and Tailwind CSS.
+A full-stack Electronic Medical Record (EMR) application built as part of the Zealthy Full Stack Engineering Exercise.
+
+The application provides an Admin Portal for managing patients, appointments, prescriptions, and medications, along with a Patient Portal for viewing upcoming appointments, prescription refills, and personal health information.
+
+---
 
 ## Features
 
-### Patient Portal
-
-- Secure patient login
-- Dashboard with patient summary
-- Upcoming appointments (next 7 days)
-- Medication refills (next 7 days)
-- View all appointments
-- View all prescriptions
-- Responsive design
-
 ### Admin Portal
 
-- Patient management
-- Create, edit and delete patients
-- Manage appointments
-- Manage prescriptions
-- Responsive dashboard
-- Searchable patient list
+* Patient Management (Create, View, Update)
+* Appointment Management
+* Prescription Management
+* Medication Management
+* Dashboard with patient statistics
+* Responsive UI
+* Server-side pagination
+
+### Patient Portal
+
+* Secure Login
+* Dashboard Summary
+* Upcoming Appointments (Next 7 Days)
+* Prescription Refills (Next 7 Days)
+* Appointment History
+* Prescription History
+* Logout
+
+---
 
 ## Tech Stack
 
-- Next.js 15
-- React 19
-- TypeScript
-- Tailwind CSS
-- shadcn/ui
-- Prisma ORM
-- PostgreSQL
-- Zod
-- React Hook Form
-- JWT Authentication
+### Frontend
 
-## Installation
+* Next.js 15 (App Router)
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* React Hook Form
+* Zod
 
-Clone the repository
+### Backend
 
-```bash
-git clone <repository-url>
-```
+* Next.js Route Handlers
+* Prisma ORM
+* PostgreSQL (Neon)
 
-Install dependencies
+### Authentication
 
-```bash
-npm install
-```
+* JWT
+* HTTP-only Cookies
 
-Create environment variables
+### Deployment
 
-```env
-DATABASE_URL=
-JWT_SECRET=
-```
+* Vercel
+* Neon PostgreSQL
 
-Generate Prisma Client
-
-```bash
-npx prisma generate
-```
-
-Run migrations
-
-```bash
-npx prisma migrate dev
-```
-
-Seed database (if applicable)
-
-```bash
-npx prisma db seed
-```
-
-Run locally
-
-```bash
-npm run dev
-```
-
-Application runs at
-
-```
-http://localhost:3000
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Production
-
-```bash
-npm start
-```
+---
 
 ## Project Structure
 
@@ -106,12 +67,120 @@ app/
 components/
 lib/
 prisma/
+repositories/
 schemas/
 services/
-repositories/
 types/
 ```
 
-## Author
+---
 
-Vineeth G
+## Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/VineethGoud712/zealthy-mini-emr.git
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Create an environment file
+
+```bash
+cp .env.example .env
+```
+
+Start the development server
+
+```bash
+npm run dev
+```
+
+## Database
+
+Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+Apply schema
+
+```bash
+npx prisma db push
+```
+
+or
+
+```bash
+npx prisma migrate deploy
+```
+
+---
+
+## Seed Database
+
+```bash
+npm run seed
+```
+
+or
+
+```bash
+npx prisma db seed
+```
+
+---
+
+## Demo Credentials
+
+### Patient Login
+
+Email : vineeth123@gmail.com
+```
+Password : vineeth123
+```
+or 
+
+You can create new Patient 
+
+Go to /admin 
+
+create New Patient and login with that credentials
+
+---
+
+## Deployment
+
+The application is deployed on Vercel.
+
+Deployment URL:
+
+```
+https://zealthy-mini-emr-two.vercel.app/
+```
+
+---
+
+## GitHub Repository
+
+```
+https://github.com/VineethGoud712/zealthy-mini-emr
+```
+
+---
+
+## Notes
+
+* Built using the Next.js App Router.
+* Uses Prisma ORM with Neon PostgreSQL.
+* Implements server-side rendering and server-side pagination.
+* Responsive design for desktop and mobile.
+* Input validation using Zod.
+* Form handling using React Hook Form.
+* Authentication using JWT stored in HTTP-only cookies.
