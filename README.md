@@ -180,7 +180,6 @@ https://github.com/VineethGoud712/zealthy-mini-emr
 * Built using the Next.js App Router.
 * Uses Prisma ORM with Neon PostgreSQL.
 * Implements server-side rendering and server-side pagination.
-* Responsive design for desktop and mobile.
 * Input validation using Zod.
 * Form handling using React Hook Form.
 * Authentication using JWT stored in HTTP-only cookies.
