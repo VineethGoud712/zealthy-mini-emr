@@ -1,31 +1,41 @@
 # Zealthy Mini EMR
 
-A full-stack Electronic Medical Record (EMR) application built as part of the Zealthy Full Stack Engineering Exercise.
+A full-stack Electronic Medical Record (EMR) and Patient Portal application built as part of the **Zealthy Full Stack Engineering Exercise**.
 
-The application provides an Admin Portal for managing patients, appointments, prescriptions, and medications, along with a Patient Portal for viewing upcoming appointments, prescription refills, and personal health information.
+The application consists of two primary modules:
+
+* **Admin Portal** (`/admin`) for managing patients, appointments, prescriptions, and medications.
+* **Patient Portal** (`/`) for authenticated patients to securely view their upcoming appointments, prescription refills, and personal health information.
+
+The application is built with modern full-stack technologies using Next.js App Router, Prisma ORM, PostgreSQL, and JWT authentication.
 
 ---
 
 ## Features
 
-### Admin Portal
+### Admin Portal (`/admin`)
 
 * Patient Management (Create, View, Update)
-* Appointment Management
-* Prescription Management
+* Appointment Management (Create, Read, Update, Delete)
+* Prescription Management (Create, Read, Update, Delete)
 * Medication Management
+* Patient Details View
 * Dashboard with patient statistics
-* Responsive UI
 * Server-side pagination
+* Responsive user interface
+* No authentication required (per exercise requirements)
 
-### Patient Portal
+---
 
-* Secure Login
-* Dashboard Summary
-* Upcoming Appointments (Next 7 Days)
-* Prescription Refills (Next 7 Days)
-* Appointment History
-* Prescription History
+### Patient Portal (`/`)
+
+* Secure patient login
+* Dashboard summary
+* Upcoming appointments (Next 7 Days)
+* Upcoming prescription refills (Next 7 Days)
+* View full upcoming appointment schedule (Next 3 Months)
+* View all upcoming prescriptions (Next 3 Months)
+* Patient profile information
 * Logout
 
 ---
@@ -62,7 +72,7 @@ The application provides an Admin Portal for managing patients, appointments, pr
 
 ## Project Structure
 
-```
+```text
 app/
 components/
 lib/
@@ -75,33 +85,38 @@ types/
 
 ---
 
-## Installation
+## Getting Started
 
-Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/VineethGoud712/zealthy-mini-emr.git
 ```
 
-Install dependencies
+```bash
+cd zealthy-mini-emr
+```
+
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-Create an environment file
+---
 
-```bash
-cp .env.example .env
+## Environment Variables
+
+Create a `.env` file in the project root.
+
+```env
+DATABASE_URL=your_database_url
+JWT_SECRET=your_jwt_secret
 ```
 
-Start the development server
+---
 
-```bash
-npm run dev
-```
-
-## Database
+## Database Setup
 
 Generate Prisma Client
 
@@ -109,7 +124,7 @@ Generate Prisma Client
 npx prisma generate
 ```
 
-Apply schema
+Apply the database schema
 
 ```bash
 npx prisma db push
@@ -125,6 +140,8 @@ npx prisma migrate deploy
 
 ## Seed Database
 
+Seed the database with the provided Zealthy sample data.
+
 ```bash
 npm run seed
 ```
@@ -135,34 +152,69 @@ or
 npx prisma db seed
 ```
 
+The seed populates:
+
+* Patients
+* Medications
+* Prescriptions
+* Appointments
+
+---
+
+## Run the Application
+
+```bash
+npm run dev
+```
+
+Open:
+
+Patient Portal
+
+```
+http://localhost:3000/
+```
+
+Admin Portal
+
+```
+http://localhost:3000/admin
+```
+
 ---
 
 ## Demo Credentials
 
 ### Patient Login
 
-Email : vineeth123@gmail.com
+Email
+
 ```
-Password : vineeth123
+vineeth123@gmail.com
 ```
-or 
 
-You can create new Patient 
+Password
 
-Go to /admin 
+```
+vineeth123
+```
 
-create New Patient and login with that credentials
+Alternatively, create a new patient from the Admin Portal and use those credentials to log in to the Patient Portal.
 
 ---
 
-## Deployment
+## Live Demo
 
-The application is deployed on Vercel.
-
-Deployment URL:
+Patient Portal
 
 ```
 https://zealthy-mini-emr-two.vercel.app/
+```
+
+Admin Portal
+
+```
+https://zealthy-mini-emr-two.vercel.app/admin
 ```
 
 ---
@@ -175,11 +227,36 @@ https://github.com/VineethGoud712/zealthy-mini-emr
 
 ---
 
-## Notes
+## Implementation Notes
 
 * Built using the Next.js App Router.
 * Uses Prisma ORM with Neon PostgreSQL.
-* Implements server-side rendering and server-side pagination.
-* Input validation using Zod.
-* Form handling using React Hook Form.
-* Authentication using JWT stored in HTTP-only cookies.
+* Database seeded with the provided Zealthy sample data.
+* Implements JWT authentication using HTTP-only cookies.
+* Uses Zod for request validation.
+* Uses React Hook Form for form management.
+* Implements server-side rendering where appropriate.
+* Implements server-side pagination for patient listings.
+
+---
+
+## Exercise Requirements Covered
+
+### Mini EMR
+
+* Patient Management (Create, Read, Update)
+* Appointment CRUD
+* Prescription CRUD
+* Medication Management
+* Admin Dashboard
+
+### Patient Portal
+
+* Patient Login
+* Dashboard Summary
+* Upcoming Appointments (Next 7 Days)
+* Upcoming Prescription Refills (Next 7 Days)
+* Full Upcoming Appointment Schedule (Next 3 Months)
+* Full Upcoming Prescription List (Next 3 Months)
+
+
